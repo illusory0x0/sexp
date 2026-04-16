@@ -1,0 +1,6 @@
+x
+(f x)
+(f x y)
+(lambda x x)
+(lambda (x) x)
+(lambda (x) (f x y))

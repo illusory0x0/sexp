@@ -1,0 +1,33 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "utlc",
+  "scopeName": "source.utlc",
+  "patterns": [
+    { "include": "#utlc" }
+  ],
+  "repository": {
+    "utlc": {
+      "patterns": [
+        { "include": "#keywords" },
+        { "include": "#identifier" },
+        { "include": "#delimiter" }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.utlc",
+          "match": "\\blambda\\b"
+        }
+      ]
+    },
+    "identifier": {
+      "name": "variable.other.utlc",
+      "match": "[a-zA-Z_][a-zA-Z0-9_]*"
+    },
+    "delimiter": {
+      "name": "punctuation.definition.delimiter.utlc",
+      "match": "[()]"
+    }
+  }
+}

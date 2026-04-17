@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parse_expr } from "../utlc/parse_expr";
+import { parse_expr } from "../parse_expr";
 
 describe("utlc parse_expr", () => {
   it("parses variable: x", () => {

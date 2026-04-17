@@ -9,20 +9,25 @@
     "utlc": {
       "patterns": [
         { "include": "#keywords" },
-        { "include": "#identifier" }
+        { "include": "#identifier" },
+        { "include": "#delimiter" }
       ]
     },
     "keywords": {
       "patterns": [
         {
-          "name": "keyword.other",
+          "name": "keyword.control.utlc",
           "match": "\\blambda\\b"
         }
       ]
     },
     "identifier": {
-      "name": "variable.name",
-      "match": "\\b[^\\-\"'`()\\[\\]\\\\{}~!@#$%^&*=+/|:;<>? \\t\\f]+\\b"
+      "name": "variable.other.utlc",
+      "match": "[a-zA-Z_][a-zA-Z0-9_]*"
+    },
+    "delimiter": {
+      "name": "punctuation.definition.delimiter.utlc",
+      "match": "[()]"
     }
   }
 }

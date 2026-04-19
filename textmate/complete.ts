@@ -53,6 +53,19 @@ let typing_span = (
   return tok ? text.slice(tok.start, tok.end) : "";
 };
 
+// Keep this in sync with `textmate/syntax.json`.
+const keyword_labels = [
+  "let",
+  "grammar",
+  "union",
+  "match",
+  "negative",
+  "repeat",
+  "concat",
+  "choice",
+  "surround",
+] as const;
+
 const make = (out: vscode.OutputChannel): Provider => {
   return {
     provideCompletionItems: (doc, pos, _) => {
@@ -62,13 +75,19 @@ const make = (out: vscode.OutputChannel): Provider => {
       let ctx: context = { toplevel: new Map(), text, report: [] };
       let ast = infer_source(ctx, sexp);
       let ts = typing_span(sexp, text, pos);
-      let rslt = [
-        ...ctx.toplevel
-          .keys()
-          .filter(x => x != ts)
-          .map(x => new Item(x, kind.Variable)),
-      ];
-      return rslt;
+      let rslt = new Map<string, Item>();
+      for (let x of keyword_labels) {
+        if (x !== ts) {
+          rslt.set(x, new Item(x, kind.Keyword));
+        }
+      }
+      for (let x of ctx.toplevel.keys()) {
+        if (x !== ts) {
+          rslt.delete(x);
+          rslt.set(x, new Item(x, kind.Variable));
+        }
+      }
+      return [...rslt.values()];
     },
   };
 };

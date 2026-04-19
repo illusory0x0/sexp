@@ -1306,6 +1306,17 @@ var typing_span = (sexp, text, pos) => {
   let tok = typing_token(sexp, pos);
   return tok ? text.slice(tok.start, tok.end) : "";
 };
+var keyword_labels = [
+  "let",
+  "grammar",
+  "union",
+  "match",
+  "negative",
+  "repeat",
+  "concat",
+  "choice",
+  "surround"
+];
 var make2 = (out) => {
   return {
     provideCompletionItems: (doc, pos, _) => {
@@ -1315,10 +1326,19 @@ var make2 = (out) => {
       let ctx = { toplevel: /* @__PURE__ */ new Map(), text, report: [] };
       let ast = infer_source(ctx, sexp);
       let ts = typing_span(sexp, text, pos);
-      let rslt = [
-        ...ctx.toplevel.keys().filter((x) => x != ts).map((x) => new import_vscode3.CompletionItem(x, import_vscode3.CompletionItemKind.Variable))
-      ];
-      return rslt;
+      let rslt = /* @__PURE__ */ new Map();
+      for (let x of keyword_labels) {
+        if (x !== ts) {
+          rslt.set(x, new import_vscode3.CompletionItem(x, import_vscode3.CompletionItemKind.Keyword));
+        }
+      }
+      for (let x of ctx.toplevel.keys()) {
+        if (x !== ts) {
+          rslt.delete(x);
+          rslt.set(x, new import_vscode3.CompletionItem(x, import_vscode3.CompletionItemKind.Variable));
+        }
+      }
+      return [...rslt.values()];
     }
   };
 };

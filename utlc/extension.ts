@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import { parse_expr, type ParseError } from "./parse_expr";
-
-
+import * as complete from "./complete";
 
 function errorToDiagnostic(err: ParseError): vscode.Diagnostic {
     const { start, end } = err.range;
@@ -17,13 +16,13 @@ function makeDiagnosticProvider(collection: vscode.DiagnosticCollection) {
         const doc = event.document;
 
         // 只处理 UTLC 文件
-        if (doc.languageId !== "utlc") return;
+        if (doc.languageId !== "utlc") {return;}
 
         // 忽略无内容变化的触发（可选，减少不必要的解析）
-        if (event.contentChanges.length === 0) return;
+        if (event.contentChanges.length === 0) {return;}
 
         // 忽略特殊 scheme（如输出面板）
-        if (doc.uri.scheme === "output") return;
+        if (doc.uri.scheme === "output") {return;}
 
         // 解析文档
         const text = doc.getText();
@@ -61,7 +60,16 @@ export function activate(context: vscode.ExtensionContext) {
     });
     context.subscriptions.push(openDisposable);
 
-    // 5. 对已打开的所有 UTLC 文件执行初始诊断
+    // 5. 注册自动补全提供器
+    const out = vscode.window.createOutputChannel("utlc", "log");
+    const cmpl = vscode.languages.registerCompletionItemProvider(
+        "utlc",
+        complete.make(out),
+        " ", "(", "λ" // 触发字符：空格、左括号、λ 符号
+    );
+    context.subscriptions.push(cmpl, out);
+
+    // 6. 对已打开的所有 UTLC 文件执行初始诊断
     vscode.workspace.textDocuments.forEach(doc => {
         if (doc.languageId === "utlc") {
             const text = doc.getText();

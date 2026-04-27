@@ -6,9 +6,14 @@
   "private": true,
   "license": "AGPL-3.0-only",
   "engines": {
-    "vscode": "^1.104.0"
+    "vscode": "^1.109.0"
   },
+
   "publisher": "PingGuoMiaoMiao",
+    "author": {
+    "name": "illusory0x0",
+    "url": "https://github.com/illusory0x0"
+  },
   "activationEvents": [],
   "contributes": {
     "languages": [

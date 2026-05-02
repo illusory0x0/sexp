@@ -6,9 +6,14 @@
   "private": true,
   "license": "AGPL-3.0-only",
   "engines": {
-    "vscode": "^1.104.0"
+    "vscode": "^1.109.0"
   },
+
   "publisher": "PingGuoMiaoMiao",
+    "author": {
+    "name": "PingGuoMiaoMiao",
+    "url": "https://github.com/PingGuoMiaoMiao"
+  },
   "activationEvents": [],
   "contributes": {
     "languages": [
